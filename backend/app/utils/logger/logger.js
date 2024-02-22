@@ -1,3 +1,6 @@
+const redisDb = require('../redis/redis')
+const requestIp = require('request-ip')
+
 const log = (level, req, message) => {
     const colors = {
         error: "\x1b[31m", // red
@@ -8,8 +11,11 @@ const log = (level, req, message) => {
 
     const logLevel = colors[level] || "";
     const logMessage = `${logLevel}[${new Date().toLocaleString()}] ${req.originalUrl} ${message} \x1b[0m`;
-
     console.log(logMessage);
+
+    const url = req.originalUrl
+    const clientIp = requestIp.getClientIp(req)
+    redisDb.addLog(clientIp, message, url, level)
 };
 
 exports.error = (req, message) => log("error", req, message);

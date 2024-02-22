@@ -6,9 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./CRUD_Library_Server.js",
-
-    "format:check":
-    "prettier --check .",
+    "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "lint:check": "eslint .",
     "lint:fix": "eslint --fix ."
@@ -26,6 +24,8 @@
     "http-status": "^1.7.3",
     "prisma": "^5.9.0",
     "qrcode-terminal": "^0.12.0",
+    "request-ip": "^3.3.0",
+    "uuid": "^9.0.1",
     "whatsapp-web.js": "^1.23.0",
     "xlsx": "^0.18.5"
   },
