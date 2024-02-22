@@ -1,7 +1,7 @@
 const redisDb = require('../redis/redis')
 const requestIp = require('request-ip')
 
-const log = (level, req, message) => {
+const log = async (level, req, message) => {
     const colors = {
         error: "\x1b[31m", // red
         warn: "\x1b[33m", // yellow
@@ -15,7 +15,7 @@ const log = (level, req, message) => {
 
     const url = req.originalUrl
     const clientIp = requestIp.getClientIp(req)
-    redisDb.addLog(clientIp, message, url, level)
+    await redisDb.addLog(clientIp, message, url, level)
 };
 
 exports.error = (req, message) => log("error", req, message);

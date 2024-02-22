@@ -1,7 +1,8 @@
 const qrcode = require('qrcode-terminal');
 const { Client } = require('whatsapp-web.js');
 const client = new Client();
-
+const redisDb = require('./app/utils/redis/redis')
+redisDb.initDb()
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const app = express();
