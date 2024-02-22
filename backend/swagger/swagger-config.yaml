@@ -1,0 +1,495 @@
+openapi: 3.0.0
+info:
+  title: Система библиотеки
+  version: 0.0.1
+servers:
+  - url: http://localhost:3000
+    description: Dev server
+paths:
+  /books:
+    get:
+      summary: Получить список книг
+      tags:
+        - Books
+      operationId: getAllBooks
+      responses:
+        '200':
+          description: Успешный получен список всех книг
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Books"
+        'default':
+          description: Ошибка! Книги не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /books/add:
+    post:
+      summary: Добавить новую книгу
+      tags:
+        - Books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Book"
+      responses:
+        '200':
+          description: Книга успешно добавлена
+        'default':
+          description: Ошибка! Книга не добавлена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /books/{bookId}:
+    get:
+      summary: Получение книги по id
+      tags:
+        - Books
+      operationId: getBookById
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          description: Id книги
+          schema:
+            type: string
+          example: 1321
+      responses:
+        '200':
+          description: Книга успешно найдена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Books"
+        'default':
+          description: Книга не найдена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /books/{bookId}/update:
+    put:
+      summary: Обновить книгу по ID
+      tags:
+        - Books
+      parameters:
+        - in: path
+          name: bookId
+          description: ID книги для редактирования
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Book"
+      responses:
+        '200':
+          description: Книга была успешно обновлена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Books"
+        'default':
+          description: Книга не найдена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /books/{bookId}/delete:
+    delete:
+      summary: Удалить книгу по ID
+      tags:
+        - Books
+      parameters:
+        - in: path
+          name: bookId
+          description: ID книги для удаления
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Книга успешна удалена
+        'default':
+          description: Книга не найдена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+  /authors:
+    get:
+      summary: Получение всех авторов
+      tags:
+        - Authors
+      operationId: getAllAuthors
+      responses:
+        '200':
+          description: Список всех авторов получен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Authors"
+        'default':
+          description: Ошибка с получением списка всех авторов
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /authors/add:
+    post:
+      summary: Создание Автора
+      tags:
+        - Authors
+      operationId: addAuthor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Author"
+      responses:
+        '200':
+          description: Успешное добавление автора
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        'default':
+          description: Ошибка с добавлением автора
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+
+  /authors/{authorId}/books:
+    get:
+      summary: Получение автора по id
+      tags:
+        - Authors
+      operationId: getAuthorById
+      parameters:
+        - name: authorId
+          in: path
+          required: true
+          description: Id автора
+          schema:
+            type: string
+          example: 1321
+      responses:
+        '200':
+          description: Автор успешно найден по id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Authors"
+        'default':
+          description: Ошибка автор не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /authors/{authorId}/update:
+    put:
+      summary: Обновление автора
+      tags:
+        - Authors
+      operationId: updateAuthorById
+      parameters:
+        - name: authorId
+          in: path
+          required: true
+          description: Id автора для обновления
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+      responses:
+        '200':
+          description: Автор успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        'default':
+          description: Автор не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /authors/{authorId}/delete:
+    delete:
+      summary: Удаление автора
+      tags:
+        - Authors
+      operationId: deleteAuthorById
+      parameters:
+        - name: authorId
+          in: path
+          required: true
+          description: Id автора
+          schema:
+            type: string
+          example: 1321
+      responses:
+        '200':
+          description: Успешное удаление автора
+          content:
+            application/json: {}
+        'default':
+          description: Автор не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+  /genres:
+    get:
+      summary: Получить список всех жанров
+      tags:
+        - Genres
+      operationId: getAllGenres
+      responses:
+        '200':
+          description: Список всех жанров успешно получен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Genres"
+        'default':
+          description: Список жанров не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /genres/add:
+    post:
+      summary: Добавить новый жанр
+      tags:
+        - Genres
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Genre"
+      responses:
+        '200':
+          description: Жанр успешно добавлен
+        'default':
+          description: Жанр не был добавлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /genres/{genreId}/books:
+    get:
+      summary: Получение жанра по id
+      tags:
+        - Genres
+      operationId: getGenreById
+      parameters:
+        - name: genreId
+          in: path
+          required: true
+          description: Id жанра
+          schema:
+            type: string
+          example: 1321
+      responses:
+        '200':
+          description: Жанр успешно найден по id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Genres"
+        'default':
+          description: Ошибка жанр не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /genres/{genreId}/update:
+    put:
+      summary: Обновить жанр по Id
+      tags:
+        - Genres
+      parameters:
+        - in: path
+          name: genreId
+          description: Id жанра
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Genre"
+      responses:
+        '200':
+          description: Жанр успешно обновлен
+        'default':
+          description: Жанр не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /genres/{genreId}/delete:
+    delete:
+      summary: Удалить жанр по Id
+      tags:
+        - Genres
+      parameters:
+        - in: path
+          name: genreId
+          description: Id жанра
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Жанр успешно удален
+        'default':
+          description: Жанр не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+  /file:
+    get:
+      summary: Скачать Эксель файл
+      tags:
+        - Files
+      operationId: downloadExcelFile
+      responses:
+        '200':
+          description: Файл успешно скачан
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        'default':
+          description: Ошибка файл не скачан
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Файл не существует
+  /file/add:
+    post:
+      summary: Отправить Эксель файл
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Файл успешно отправлен
+        'default':
+          description: Файл не отправлен
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Нет загружаемых файлов
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Tom Soyer
+        author:
+          type: string
+          example: Steven King
+        publishYear:
+          type: integer
+          format: int32
+          example: 2003
+        pageCount:
+          type: integer
+          format: int32
+          example: 234
+        price:
+          type: number
+          format: float
+          example: 1000
+    Books:
+      type: array
+      items:
+        $ref: "#/components/schemas/Book"
+    Author:
+      type: object
+      required:
+        - name
+        - surname
+      properties:
+        authorId:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Arnur
+        surname:
+          type: string
+          example: Timen
+        birthday:
+          type: string
+          example: 01.01.2000
+    Authors:
+      type: array
+      items:
+        $ref: "#/components/schemas/Author"
+    Genre:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Phantasy
+    Genres:
+      type: array
+      items:
+        $ref: "#/components/schemas/Genre"
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

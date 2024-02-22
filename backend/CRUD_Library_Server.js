@@ -20,6 +20,13 @@ app.use('/authors', authorRoutes);
 app.use('/genres', genreRoutes);
 app.use('/file', fileRoutes);
 
+const fs = require('fs')
+const swaggerUi = require('swagger-ui-express')
+const yaml = require('js-yaml');
+const swaggerFile = yaml.load(fs.readFileSync('./swagger/swagger-config.yaml', 'utf8'));
+app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
+
 app.listen(PORT, () => {
     console.log(`The server is running on port ${PORT}`)
 })
