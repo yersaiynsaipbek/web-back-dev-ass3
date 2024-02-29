@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const qrcode = require('qrcode-terminal');
 const { Client } = require('whatsapp-web.js');
-const {info} = require("../../utils/logger/logger");
+const recoveryPasswordStorage = require('../../utils/recoverypassword/storage')
 const client = new Client();
 
 // WHATSAPP BOT
@@ -40,4 +40,32 @@ exports.subscribeUser = async (info) => {
     } finally {
         await prisma.$disconnect()
     }
+}
+
+exports.recoveryPassword = async (username) => {
+    try {
+        const userData = await prisma.users.findFirst({
+            where: {
+                username: username
+            }
+        })
+
+        if (userData === null) {
+            return "User not found"
+        }
+
+        const generatedRecoveryPassword = generateRandomValue()
+
+        await recoveryPasswordStorage.saveKeyWithTTL(username, generatedRecoveryPassword)
+        await client.sendMessage(`${userData.phone_number}@c.us`, `[ VALID FOR ONLY 2 MINUTES! ] Recovery password: ${generatedRecoveryPassword}`);
+    } catch (error) {
+        console.error('Error retrieving user IDs:', error);
+    } finally {
+        await prisma.$disconnect()
+    }
+}
+
+function generateRandomValue() {
+    let randomNumber = Math.floor(Math.random() * 10000);
+    return randomNumber.toString().padStart(4, '0');
 }

@@ -57,11 +57,11 @@ model users {
   id           Int    @id @unique @default(autoincrement())
   username     String @unique
   password     String
-  user_role    String
+  role_name    String
   phone_number String @unique
 }
 
 model notification_followers {
-  chatId    String      @id @unique
+  chatId    String   @id @unique
   createdAt DateTime @default(now())
 }

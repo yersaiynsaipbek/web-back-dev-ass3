@@ -21,12 +21,14 @@ const bookRoutes = require('./app/routers/booksRouter');
 const genreRoutes = require('./app/routers/genresRouter');
 const fileRoutes = require('./app/routers/fileRouter');
 const authRouter = require('./app/routers/authRouter');
+const oAuth2Router = require('./app/routers/oAuth2Router')
 
 app.use('/books', bookRoutes);
 app.use('/authors', authorRoutes);
 app.use('/genres', genreRoutes);
 app.use('/file', fileRoutes);
 app.use('/auth', authRouter);
+app.use('/oauth2', oAuth2Router);
 
 const fs = require('fs')
 const swaggerUi = require('swagger-ui-express')
