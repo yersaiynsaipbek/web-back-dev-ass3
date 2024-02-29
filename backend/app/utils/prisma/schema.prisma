@@ -52,3 +52,11 @@ model book_genre {
 
   @@id([book_id, genre_id])
 }
+
+model users {
+  id           Int    @id @unique @default(autoincrement())
+  username     String @unique
+  password     String
+  user_role    String
+  phone_number String @unique
+}
