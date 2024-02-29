@@ -60,3 +60,8 @@ model users {
   user_role    String
   phone_number String @unique
 }
+
+model notification_followers {
+  chatId    String      @id @unique
+  createdAt DateTime @default(now())
+}

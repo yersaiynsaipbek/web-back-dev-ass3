@@ -1,3 +1,9 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
+// Init dependencies
+const whatsappBot = require('./app/bot/whatsapp/botserver')
+
 const qrcode = require('qrcode-terminal');
 const { Client } = require('whatsapp-web.js');
 const client = new Client();

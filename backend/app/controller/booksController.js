@@ -1,6 +1,9 @@
 const bookService = require('../services/bookService');
 const HttpStatus = require('http-status');
 const axios = require("axios");
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+const jwtTokenService = require('../utils/jwt/jwt')
 
 exports.getAllBooks = async (req, res) => {
     try {
@@ -33,6 +36,20 @@ exports.getAllBooks = async (req, res) => {
 
 exports.addBook = async (req, res) => {
     try {
+        // Getting jwt token from cookie
+        const jwtToken = req.cookies['jwt-token']
+        let extractedUsernameFromCookie = await jwtTokenService.getUsernameFromToken(jwtToken);
+
+        const currentUserData = await prisma.users.findFirst({
+            where: {
+                username: extractedUsernameFromCookie
+            }
+        })
+
+        if (currentUserData.role_name !== "ADMIN" || currentUserData.role_name !== "MANAGER") {
+            res.status(HttpStatus.FORBIDDEN).json({message: "You don't have access the method!"})
+        }
+
         const book = req.body;
         const message = await bookService.addBook(book);
 
@@ -55,6 +72,20 @@ exports.addBook = async (req, res) => {
 
 exports.updateBook = async (req, res) => {
     try {
+        // Getting jwt token from cookie
+        const jwtToken = req.cookies['jwt-token']
+        let extractedUsernameFromCookie = await jwtTokenService.getUsernameFromToken(jwtToken);
+
+        const currentUserData = await prisma.users.findFirst({
+            where: {
+                username: extractedUsernameFromCookie
+            }
+        })
+
+        if (currentUserData.role_name !== "MANAGER" || currentUserData.role_name !== "ADMIN") {
+            res.status(HttpStatus.FORBIDDEN).json({message: "You don't have access the method!"})
+        }
+
         const bookId = req.params.id;
         const updateBook = req.body;
 
