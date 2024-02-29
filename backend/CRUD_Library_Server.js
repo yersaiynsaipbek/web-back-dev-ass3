@@ -14,11 +14,13 @@ const authorRoutes = require('./app/routers/authorsRouter');
 const bookRoutes = require('./app/routers/booksRouter');
 const genreRoutes = require('./app/routers/genresRouter');
 const fileRoutes = require('./app/routers/fileRouter');
+const authRouter = require('./app/routers/authRouter');
 
 app.use('/books', bookRoutes);
 app.use('/authors', authorRoutes);
 app.use('/genres', genreRoutes);
 app.use('/file', fileRoutes);
+app.use('/auth', authRouter);
 
 const fs = require('fs')
 const swaggerUi = require('swagger-ui-express')
