@@ -35,3 +35,19 @@ exports.register = async(req,res)=> {
         message: "Successfully!"
     })
 }
+
+exports.sendRecoveryCodeToWhatsapp = async (req, res) => {
+    const username = req.query.username;
+    const responseMessageFromBot = await authService.sendRecoveryCodeByWhatsapp(username)
+    res.status(HttpStatus.OK).json({message: responseMessageFromBot})
+}
+
+exports.recoveryPasswordByCode = async (req, res) => {
+    const username = req.query.username;
+    const code  = req.query.code;
+    const password = req.query.password;
+
+    const responseMessage = await authService.recoveryPasswordByRecoveryCode(username, code, password)
+
+    res.status(HttpStatus.OK).json({message: responseMessage})
+}
